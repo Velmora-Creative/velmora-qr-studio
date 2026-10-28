@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Create free custom QR codes for links, text and Wi-Fi. Customize colors and download PNGs with Velmora QR Studio.">
+  <meta property="og:title" content="QR Studio — Velmora">
+  <meta property="og:description" content="Create custom QR codes for links, text and Wi-Fi for free.">
+  <meta property="og:type" content="website">
+  <title>QR Studio — Velmora</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="#" aria-label="Velmora QR Studio home">
+      <span class="brand-icon">V</span>
+      <span>velmora<span class="brand-light">.</span></span>
+    </a>
+    <span class="nav-label">QR STUDIO</span>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <span class="eyebrow">FREE ONLINE TOOL</span>
+      <h1>Your ideas.<br><span>One scan away.</span></h1>
+      <p>Create custom QR codes for links, text and Wi-Fi. Simple, free, and ready to download.</p>
+    </section>
+
+    <section class="studio">
+      <div class="editor">
+        <div class="section-heading">
+          <span class="step">01</span>
+          <div>
+            <h2>Your content</h2>
+            <p>Choose what your QR code should do.</p>
+          </div>
+        </div>
+
+        <label for="content-mode">QR code type</label>
+        <select id="content-mode" class="mode-select">
+          <option value="text">Website URL or text</option>
+          <option value="wifi">Wi-Fi connection</option>
+        </select>
+
+        <div id="text-fields">
+          <label for="qr-content">Website URL or text</label>
+          <textarea id="qr-content" placeholder="https://example.com" rows="4" maxlength="2000"></textarea>
+          <p class="hint">Enter a website link or any short text.</p>
+        </div>
+
+        <div id="wifi-fields" hidden>
+          <label for="wifi-ssid">Wi-Fi network name (SSID)</label>
+          <input id="wifi-ssid" class="text-input" type="text" maxlength="200" placeholder="My Wi-Fi" autocomplete="off">
+
+          <label for="wifi-password">Wi-Fi password</label>
+          <input id="wifi-password" class="text-input" type="password" maxlength="200" placeholder="Enter password" autocomplete="off">
+
+          <label for="wifi-security">Security type</label>
+          <select id="wifi-security" class="mode-select">
+            <option value="WPA">WPA / WPA2 / WPA3</option>
+            <option value="WEP">WEP</option>
+            <option value="nopass">No password</option>
+          </select>
+
+          <label class="wifi-checkbox" for="wifi-hidden">
+            <input id="wifi-hidden" type="checkbox">
+            Hidden Wi-Fi network
+          </label>
+
+          <p class="hint">Anyone who scans this code may be able to access your network. Avoid sharing it publicly.</p>
+        </div>
+
+        <div class="section-heading customize-heading">
+          <span class="step">02</span>
+          <div>
+            <h2>Make it yours</h2>
+            <p>Choose your QR code colors.</p>
+          </div>
+        </div>
+
+        <div class="color-row">
+          <label for="qr-color">QR color</label>
+          <input type="color" id="qr-color" value="#8062df">
+          <span id="qr-color-value">#8062DF</span>
+        </div>
+
+        <div class="color-row">
+          <label for="bg-color">Background</label>
+          <input type="color" id="bg-color" value="#ffffff">
+          <span id="bg-color-value">#FFFFFF</span>
+        </div>
+
+        <button id="generate-btn" class="primary-btn" type="button">
+          Generate QR code <span aria-hidden="true">→</span>
+        </button>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </div>
+
+      <div class="preview-panel">
+        <div class="preview-top">
+          <span class="preview-label">LIVE PREVIEW</span>
+          <span class="preview-dot"></span>
+        </div>
+
+        <div class="qr-stage">
+          <div id="qr-placeholder">
+            <div class="placeholder-icon">▦</div>
+            <p>Your QR code will appear here</p>
+            <span>Enter your content to get started</span>
+          </div>
+          <div id="qrcode" aria-label="Generated QR code"></div>
+        </div>
+
+        <h3 id="preview-title">Your QR, your way.</h3>
+        <p id="preview-description">A little code that connects people to your world.</p>
+
+        <button id="download-btn" class="secondary-btn" type="button" disabled>
+          ↓ &nbsp; Download PNG
+        </button>
+        <p class="download-note">High-contrast colors work best for scanning.</p>
+      </div>
+    </section>
+
+    <section class="features">
+      <div>
+        <span>✦</span>
+        <h3>Free forever</h3>
+        <p>No account or subscription needed.</p>
+      </div>
+      <div>
+        <span>◈</span>
+        <h3>Custom colors</h3>
+        <p>Match your QR code to your style.</p>
+      </div>
+      <div>
+        <span>↗</span>
+        <h3>Easy to share</h3>
+        <p>Download a PNG for your projects.</p>
+      </div>
+    </section>
+
+    <section class="faq">
+      <h2>Frequently asked questions</h2>
+      <details>
+        <summary>Is Velmora QR Studio free?</summary>
+        <p>Yes. You can create and download QR codes without creating an account.</p>
+      </details>
+      <details>
+        <summary>Can I make a Wi-Fi QR code?</summary>
+        <p>Yes. Choose Wi-Fi connection, enter the network details, and generate a code that compatible devices can scan.</p>
+      </details>
+      <details>
+        <summary>Do QR codes expire?</summary>
+        <p>These are static QR codes. The encoded content does not expire, but a website link may stop working if its destination changes or becomes unavailable.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand footer-brand" href="#">
+      <span class="brand-icon">V</span>
+      <span>velmora<span class="brand-light">.</span></span>
+    </a>
+    <p>Built for creators. Made with purpose.</p>
+    <span>© 2026 Velmora</span>
+  </footer>
+</body>
+</html>
