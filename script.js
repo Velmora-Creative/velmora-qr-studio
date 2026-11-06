@@ -1,4 +1,3 @@
-
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const previewDescription = $("preview-description");
 
   let payload = "";
-  let payloadColor = "";
   let payloadBackground = "";
   let version = 0;
 
@@ -37,14 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function clearPreview() {
-    version++;
+    version += 1;
     qrContainer.replaceChildren();
     qrContainer.style.display = "none";
     placeholder.style.display = "block";
     downloadBtn.disabled = true;
 
     payload = "";
-    payloadColor = "";
     payloadBackground = "";
 
     previewTitle.textContent = "Your QR, your way.";
@@ -59,25 +56,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function luminance(hex) {
     const rgb = hex.match(/[a-f\d]{2}/gi).map((part) => {
-      let value = parseInt(part, 16) / 255;
+      const value = parseInt(part, 16) / 255;
 
       return value <= 0.04045
         ? value / 12.92
         : ((value + 0.055) / 1.055) ** 2.4;
     });
 
-    return 0.2126 * rgb[0] +
-      0.7152 * rgb[1] +
-      0.0722 * rgb[2];
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
   }
 
   function hasEnoughContrast(foreground, background) {
     const a = luminance(foreground);
     const b = luminance(background);
-    return (Math.max(a, b) + 0.05) /
-      (Math.min(a, b) + 0.05) >= 3;
+
+    return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) >= 3;
   }
 
+  // Escape characters reserved by the Wi-Fi QR-code format.
   function escapeWifiValue(value) {
     return value.replace(/([\\;,:"])/g, "\\$1");
   }
@@ -103,19 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
       throw new Error("Enter your Wi-Fi network name.");
     }
 
-    if (network.length > 200) {
-      throw new Error("Your network name is too long.");
-    }
-
     const type = security.value;
     const pass = password.value;
 
     if (type !== "nopass" && !pass) {
       throw new Error("Enter your Wi-Fi password.");
-    }
-
-    if (pass.length > 200) {
-      throw new Error("Your Wi-Fi password is too long.");
     }
 
     let value = `WIFI:T:${type};S:${escapeWifiValue(network)};`;
@@ -152,17 +140,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!hasEnoughContrast(qrColor.value, bgColor.value)) {
       clearPreview();
-      setStatus("Low contrast. Try a darker QR color.", true);
+      setStatus("Low contrast. Try a darker QR color or lighter background.", true);
       return;
     }
 
     if (typeof window.QRCode !== "function") {
       clearPreview();
-      setStatus("QR library failed to load. Check your internet.", true);
+      setStatus("QR library failed to load. Check your internet connection.", true);
       return;
     }
 
     const currentVersion = ++version;
+
     qrContainer.replaceChildren();
     qrContainer.style.display = "block";
     placeholder.style.display = "none";
@@ -180,7 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       payload = result.value;
-      payloadColor = qrColor.value;
       payloadBackground = bgColor.value;
 
       previewTitle.textContent = result.title;
@@ -191,14 +179,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const canvas = qrContainer.querySelector("canvas");
 
-        if (canvas && canvas.width > 0) {
+        if (canvas && canvas.width > 0 && canvas.height > 0) {
           downloadBtn.disabled = false;
           setStatus("QR code generated successfully!");
         } else {
           clearPreview();
-          setStatus("Couldn't render the QR code. Try again.", true);
+          setStatus("Couldn't render the QR code. Please try again.", true);
         }
-      }, 250);
+      }, 300);
     } catch (error) {
       clearPreview();
       setStatus("QR generation failed. Please try again.", true);
@@ -218,7 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
 
-      if (!context) throw new Error("Canvas unavailable");
+      if (!context) {
+        throw new Error("Canvas is unavailable.");
+      }
 
       canvas.width = original.width + border * 2;
       canvas.height = original.height + border * 2;
@@ -245,15 +235,19 @@ document.addEventListener("DOMContentLoaded", () => {
     textFields.hidden = wifi;
     wifiFields.hidden = !wifi;
 
-    setStatus(wifi
-      ? "Enter your Wi-Fi details to get started."
-      : "Enter a URL or text to get started.");
+    setStatus(
+      wifi
+        ? "Enter your Wi-Fi details to get started."
+        : "Enter a URL or text to get started."
+    );
   }
 
   function updateColors() {
     updateColorLabels();
 
-    if (payload) generateQRCode();
+    if (payload) {
+      generateQRCode();
+    }
   }
 
   function invalidatePreview() {
@@ -277,7 +271,10 @@ document.addEventListener("DOMContentLoaded", () => {
   security.addEventListener("change", () => {
     password.disabled = security.value === "nopass";
 
-    if (password.disabled) password.value = "";
+    if (password.disabled) {
+      password.value = "";
+    }
+
     invalidatePreview();
   });
 
@@ -288,9 +285,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   updateColorLabels();
-  updateMode();
   password.disabled = security.value === "nopass";
-  clearPreview();
+  updateMode();
 
   console.log("Velmora QR Studio initialized.");
 });
