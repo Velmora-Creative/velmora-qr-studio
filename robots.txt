@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://velmora-qr-studio.testiunn6.workers.dev/sitemap.xml
